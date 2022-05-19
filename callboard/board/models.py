@@ -9,7 +9,10 @@ class Author(models.Model):
     authorUser = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to='photo/img_avatar', blank=True, null=True)
     status = models.BooleanField(default=False)
-    codeUser = models.IntegerField
+    codeUser = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.authorUser.username}'
 
 
 class Post(models.Model):
@@ -31,7 +34,10 @@ class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     postCategory = models.CharField(max_length=12, choices=TYPE, default='tank')
     timeInCreation = models.DateTimeField(auto_now_add=True)
-    upload = models.FileField(upload_to='uploads/')
+    upload = models.FileField(upload_to='uploads/', blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.header[:30]}... : {self.text[:60]}'
 
 
 class Reply(models.Model):
@@ -41,14 +47,3 @@ class Reply(models.Model):
     commentAuthor = models.ForeignKey(Author, on_delete=models.CASCADE)
     timeInCreation = models.DateTimeField(auto_now_add=True)
     commentShow = models.BooleanField(null=True, default=None)
-
-
-class BaseRegisterForm(UserCreationForm):
-    """Форма регистрации пользователей, расширение модели User"""
-    email = forms.EmailField(label='Email')
-    first_name = forms.CharField(label='Имя')
-    last_name = forms.CharField(label='Фамилия')
-
-    class Meta:
-        model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)

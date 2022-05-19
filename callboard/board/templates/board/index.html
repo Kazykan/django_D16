@@ -1,8 +1,29 @@
 {% extends "main.html" %}
 
-{% block content %}
-<h2>Страница авторизованного пользователя {{request.user.username}}</h2>
-<div> Здесь может содержаться персональная информация для каждого пользователя </div>
+{% block title %}Страница пользователя {{request.user.username}}{% endblock %}
+{% block header %}
+<h2 class="heading">Объявления </h2>
+{% endblock %}
 
-<button> <a href="sign/logout/">Выйти</a> </button>
+{% block content %}
+    {% if posts %}
+        {% for post in posts %}
+			    <div class="item mb-5">
+				    <div class="row g-3 g-xl-0">
+					    <div class="col-2 col-xl-3">
+					        <img class="img-fluid post-thumb " src="assets/images/blog/blog-post-thumb-1.jpg" alt="image">
+					    </div>
+					    <div class="col">
+						    <h3 class="title mb-1"><a class="text-link" href="blog-post.html">{{ post.header }}</a></h3>
+						    <div class="meta mb-1"><span class="date">{{ post.timeInCreation|date:'d M Y'}}</span><span class="comment"><a class="text-link" href="#">{{ post.postCategory }}</a></span></div>
+						    <div class="intro">{{ post.text }} <hr>
+								Автор: {{ post.author }}
+							</div>
+						    <a class="text-link" href="blog-post.html">Read more &rarr;</a>
+					    </div><!--//col-->
+				    </div><!--//row-->
+			    </div><!--//item-->
+        {% endfor %}
+    {% endif %}
+
 {% endblock %}

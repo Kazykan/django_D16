@@ -1,17 +1,19 @@
 from django.contrib.auth.models import User
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import BaseRegisterForm
+from .models import Reply, Post
 
 
-class IndexView(TemplateView):
-    """Стандартная страница заглушка - временно"""
+class ProfileView(ListView):
+    """Профиль пользователя со списком его подписок на категории и если нет подтверждения регистрации отображение ее"""
+    model = Reply
+    template_name = 'board/profile.html'
+    context_object_name = 'reply'
+
+
+class PostView(ListView):
+    """Посты пользователей"""
+    model = Post
     template_name = 'board/index.html'
-
-
-class BaseRegisterView(CreateView):
-    """Регистрация пользователей"""
-    model = User
-    form_class = BaseRegisterForm
-    success_url = '/'
+    context_object_name = 'posts'
