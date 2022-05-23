@@ -1,7 +1,7 @@
-from django.contrib.auth.forms import UserCreationForm
+from random import randint
+
 from django.db import models
 from django.contrib.auth.models import User
-from django import forms
 
 
 class Author(models.Model):
@@ -13,6 +13,16 @@ class Author(models.Model):
 
     def __str__(self):
         return f'{self.authorUser.username}'
+
+    def code_generation(self):
+        """Генерация 4-х значного кода и запись его в codeUser"""
+        self.codeUser = randint(1000, 9999)
+        self.save()
+
+    def check_status(self):
+        """Установка галочки верификации пользователя"""
+        self.status = True
+        self.save()
 
 
 class Post(models.Model):
@@ -38,6 +48,9 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.header[:30]}... : {self.text[:60]}'
+
+    def get_absolute_url(self):
+        return f'/post/{self.id}'
 
 
 class Reply(models.Model):
